@@ -2,7 +2,10 @@
 
 import os
 import platform
-from pkg_resources import resource_filename, resource_string
+try:
+    from pkg_resources import resource_filename, resource_string
+except ImportError:
+    from txclib.packages.pkg_resources import resource_filename, resource_string
 from txclib import get_version
 
 
