@@ -556,7 +556,7 @@ class Project(object):
                     base_dir = os.path.split(local_file)[0]
                     mkdir_p(base_dir)
                     fd = open(local_file, 'wb')
-                    fd.write(r)
+                    fd.write(r.encode("utf-8"))
                     fd.close()
 
     def push(self, source=False, translations=False, force=False, resources=[], languages=[],
@@ -836,8 +836,7 @@ class Project(object):
         # Create the Url
         kwargs['hostname'] = hostname
         kwargs.update(self.url_info)
-        url = (API_URLS[api_call] % kwargs).encode('UTF-8')
-        logger.debug(url)
+        url = API_URLS[api_call] % kwargs
 
         if multipart:
             for info, filename in files:
@@ -868,9 +867,14 @@ class Project(object):
             )
 
         r.close()
+        print(url)
+        print(r.data)
+        data = r.data
+        if isinstance(data, bytes):
+            data = data.decode("utf-8")
         if r.status < 200 or r.status >= 400:
-            raise Exception(r.data)
-        return r.data
+            raise Exception(data)
+        return data
 
     def _should_update_translation(self, lang, stats, local_file, force=False,
                                    mode=None):
