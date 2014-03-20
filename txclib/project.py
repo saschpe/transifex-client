@@ -867,8 +867,6 @@ class Project(object):
             )
 
         r.close()
-        print(url)
-        print(r.data)
         data = r.data
         if isinstance(data, bytes):
             data = data.decode("utf-8")
